@@ -1,0 +1,3 @@
+feature ntp vrf management
+ntp enable vrf management
+ntp server 0.ru.pool.ntp.org vrf management
