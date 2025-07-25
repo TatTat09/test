@@ -1,0 +1,43 @@
+service password-encryption
+!
+logging logfile all 4
+logging level nsm 7 
+logging level auth 7 
+logging level hsl 7 
+logging level bgp 7 
+logging level all 4 
+aaa authentication login default vrf management local
+snmp-server enable snmp vrf management 
+snmp-server view all .1 included vrf management
+snmp-server community public vrf management
+snmp-server enable traps link linkDown
+snmp-server enable traps link linkUp
+!
+nvo vxlan enable
+!
+nvo vxlan irb
+!
+evpn esi hold-time 240
+!
+evpn vxlan multihoming enable
+!
+load-balance rtag7
+load-balance rtag7 hash crc32-hi
+load-balance rtag7 l2 dest-mac src-mac ether-type vlan
+load-balance rtag7 ipv4 dest-ipv4 src-ipv4 destl4-port srcl4-port protocol-id
+load-balance rtag7 ipv6 dest-ipv6 src-ipv6 destl4-port srcl4-port next-hdr
+load-balance rtag7 mpls labels
+load-balance rtag7 vxlan inner-l3 dest-ip src-ip destl4-port srcl4-port protocol-id
+load-balance rtag7 vxlan inner-l2 dest-mac src-mac
+!
+lldp run
+lldp tlv-select basic-mgmt port-description
+lldp tlv-select basic-mgmt system-name
+lldp tlv-select basic-mgmt system-capabilities
+lldp tlv-select basic-mgmt system-description
+lldp tlv-select basic-mgmt management-address
+!
+ntp server 0.ru.pool.ntp.org123 vrf management
+clock timezone XXX
+ip name-server vrf management 1.1.1.1
+ip name-server vrf management 2.2.2.2
